@@ -1,0 +1,172 @@
+<#include "/macro.include"/>
+<#assign className = table.className>   
+<#assign classNameFirstLower = table.classNameFirstLower>   
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<#macro mapperEl value>${r"#{"}${value}}</#macro>
+<#macro mapperElEx value>${r"#{item."}${value}}</#macro>
+<#macro namespace>${className}.</#macro>
+
+<mapper namespace="${basepackage}.model.${className}">
+
+	<!-- POJO类与数据库字段对应关系 -->
+	<resultMap id="${prefix}_${className}" type="${basepackage}.model.${className}">
+		<#list table.columns as column>
+        <result property="${column.columnNameLower}" column="${column.sqlName}"/>
+		</#list>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+		<#list table.columns as column>${column.sqlName}<#if column_has_next>,</#if></#list>
+	    ]]>
+	</sql>
+
+	<!-- 插入 -->
+	<insert id="insert" useGeneratedKeys="true" keyProperty="${table.idColumn.columnNameFirstLower}">
+    	<![CDATA[
+ 		INSERT INTO ${table.sqlName} (
+        <#list table.columns as column>
+        	${column.sqlName} <#if column_has_next>,</#if>
+        </#list>
+        ) VALUES (
+        <#list table.columns as column>
+        	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+        </#list>        
+        )
+    	]]>
+	</insert>
+	
+	<!-- 批量插入 -->
+	<insert id="insertBatch" useGeneratedKeys="true" keyProperty="${table.idColumn.columnNameFirstLower}" parameterType="java.util.List">
+		INSERT INTO ${table.sqlName} (
+        <#list table.columns as column>
+        	${column.sqlName} <#if column_has_next>,</#if>
+        </#list>
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+        <#list table.columns as column>
+        	<@mapperElEx column.columnNameFirstLower/> <#if column_has_next>,</#if>
+        </#list>        
+        )
+        </foreach>
+	</insert>
+	
+	<!-- 更新字段列表 -->
+	<sql id="update_sql">
+		<set>
+		<#list table.notPkColumns as column>
+            <#if column.isDateTimeColumn>
+            <if test="${column.columnNameFirstLower} != null">
+	         	${column.sqlName} = <@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+	       	</if>
+	       	</#if>  
+	       	<#if column.isNumberColumn>
+			<if test="${column.columnNameFirstLower} != null">
+	         	${column.sqlName} = <@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+			</if>
+	       	</#if>
+	        <#if column.isStringColumn>
+            <if test="${column.columnNameFirstLower} != null and ${column.columnNameFirstLower} != ''">
+	         	${column.sqlName} = <@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+	        </if>
+	      	</#if>
+		</#list>  
+		</set>
+	</sql>
+    
+    <!-- 更新 -->
+	<update id="update">
+		UPDATE  ${table.sqlName}
+	    <include refid="update_sql"/>
+	    <![CDATA[
+		WHERE 
+		<#list table.compositeIdColumns as column>
+			${column.sqlName} = <@mapperEl column.columnNameLower/> <#if column_has_next> AND </#if>
+		</#list>	
+		]]>
+	</update>
+
+	<!-- 删除 -->
+    <delete id="delete">
+    	<![CDATA[
+        DELETE FROM ${table.sqlName} 
+        WHERE
+        <#list table.compositeIdColumns as column>
+        	${column.sqlName} = <@mapperEl 'id'/> <#if column_has_next> AND </#if>
+		</#list>
+		]]>
+    </delete>
+    
+    <!-- 根据ID查询 -->
+    <select id="getById" resultMap="${prefix}_${className}">
+		SELECT <include refid="columns" />
+	    <![CDATA[
+		FROM ${table.sqlName} 
+		WHERE 1 = 1
+		<#list table.compositeIdColumns as column>
+			${column.sqlName} = <@mapperEl 'id'/> <#if column_has_next> AND </#if>
+		</#list>    
+	    ]]>
+	</select>
+	
+	<!-- 查询条件 -->
+	<sql id="findPage_where">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	  
+			1 = 1    				
+		<#list table.columns as column>
+		<#if column.isDateTimeColumn>
+			<if test="${column.columnNameFirstLower}Begin != null">
+			AND ${column.sqlName} >= <@mapperEl column.columnNameFirstLower+"Begin"/>
+		   	</if>
+		   	<if test="${column.columnNameFirstLower}End != null">
+			AND ${column.sqlName} &lt;= <@mapperEl column.columnNameFirstLower+"End"/>
+		   	</if>
+		<#else>
+		<#if column.isNumberColumn>
+           	<if test="${column.columnNameFirstLower} != null">
+			AND ${column.sqlName} = <@mapperEl column.columnNameFirstLower/>
+           	</if>
+		</#if>
+		<#if column.isStringColumn>
+            <if test="${column.columnNameFirstLower} != null and ${column.columnNameFirstLower} !=''">
+			AND ${column.sqlName} = <@mapperEl column.columnNameFirstLower/>
+            </if>
+		</#if>
+		</#if>
+		</#list>			
+		</where>
+	</sql>
+		
+	<!-- 查询数量 -->
+	<select id="findPage_count" resultType="long">
+        SELECT COUNT(ID) FROM ${table.sqlName} 
+		<include refid="findPage_where"/>    
+    </select>
+    
+    <!-- 查询分页 -->
+    <select id="findPage" resultMap="${prefix}_${className}">
+		SELECT <include refid="columns" />
+	    FROM ${table.sqlName} 
+		<include refid="findPage_where"/>
+		<if test="sortColumns != null and sortColumns !=''">
+		ORDER BY <@jspEl 'sortColumns'/>
+		</if>
+    </select>
+
+    <#list table.columns as column>
+    <#if column.unique && !column.pk>
+    <select id="getBy${column.columnName}" resultMap="${prefix}_${className}" parameterType="${column.javaType}">
+		SELECT <include refid="columns"/>
+	    <![CDATA[
+		FROM ${table.sqlName} 
+		WHERE ${column.sqlName} = <@mapperEl column.columnNameLower/>
+	    ]]>
+    </select>
+    </#if>
+	</#list>
+</mapper>
