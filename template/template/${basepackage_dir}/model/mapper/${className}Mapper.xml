@@ -27,13 +27,43 @@
 	<!-- 插入 -->
 	<insert id="insert" useGeneratedKeys="true" keyProperty="${table.idColumn.columnNameFirstLower}">
     	<![CDATA[
- 		INSERT INTO ${table.sqlName} (
+ 		INSERT INTO ${table.sqlName} ( 
         <#list table.columns as column>
-        	${column.sqlName} <#if column_has_next>,</#if>
+        	<#if column.isDateTimeColumn>
+            <if test="${column.columnNameFirstLower} != null">
+	         	${column.sqlName} <#if column_has_next>,</#if>
+	       	</if>
+	       	</#if>  
+	       	<#if column.isNumberColumn>
+			<if test="${column.columnNameFirstLower} != null">
+	         	${column.sqlName} <#if column_has_next>,</#if>
+			</if>
+	       	</#if>
+	        <#if column.isStringColumn>
+            <if test="${column.columnNameFirstLower} != null and ${column.columnNameFirstLower} != ''">
+	         	${column.sqlName} <#if column_has_next>,</#if>
+	        </if>
+	      	</#if>
         </#list>
         ) VALUES (
         <#list table.columns as column>
-        	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+        	<#if column.isDateTimeColumn>
+            <if test="${column.columnNameFirstLower} != null">
+	         	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+	       	<else>
+	       		NOW() <#if column_has_next>,</#if>
+	       	</if>
+	       	</#if>  
+	       	<#if column.isNumberColumn>
+			<if test="${column.columnNameFirstLower} != null">
+	         	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+			</if>
+	       	</#if>
+	        <#if column.isStringColumn>
+            <if test="${column.columnNameFirstLower} != null and ${column.columnNameFirstLower} != ''">
+	         	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+	        </if>
+	      	</#if>
         </#list>        
         )
     	]]>
@@ -43,13 +73,43 @@
 	<insert id="insertBatch" useGeneratedKeys="true" keyProperty="${table.idColumn.columnNameFirstLower}" parameterType="java.util.List">
 		INSERT INTO ${table.sqlName} (
         <#list table.columns as column>
-        	${column.sqlName} <#if column_has_next>,</#if>
+        	<#if column.isDateTimeColumn>
+            <if test="${column.columnNameFirstLower} != null">
+	         	${column.sqlName} <#if column_has_next>,</#if>
+	       	</if>
+	       	</#if>  
+	       	<#if column.isNumberColumn>
+			<if test="${column.columnNameFirstLower} != null">
+	         	${column.sqlName} <#if column_has_next>,</#if>
+			</if>
+	       	</#if>
+	        <#if column.isStringColumn>
+            <if test="${column.columnNameFirstLower} != null and ${column.columnNameFirstLower} != ''">
+	         	${column.sqlName} <#if column_has_next>,</#if>
+	        </if>
+	      	</#if>
         </#list>
         ) VALUES 
         <foreach collection="list" item="item" index="index" separator=",">
         (
         <#list table.columns as column>
-        	<@mapperElEx column.columnNameFirstLower/> <#if column_has_next>,</#if>
+        	<#if column.isDateTimeColumn>
+            <if test="${column.columnNameFirstLower} != null">
+	         	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+	       	<else>
+	       		NOW() <#if column_has_next>,</#if>
+	       	</if>
+	       	</#if>  
+	       	<#if column.isNumberColumn>
+			<if test="${column.columnNameFirstLower} != null">
+	         	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+			</if>
+	       	</#if>
+	        <#if column.isStringColumn>
+            <if test="${column.columnNameFirstLower} != null and ${column.columnNameFirstLower} != ''">
+	         	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+	        </if>
+	      	</#if>
         </#list>        
         )
         </foreach>
