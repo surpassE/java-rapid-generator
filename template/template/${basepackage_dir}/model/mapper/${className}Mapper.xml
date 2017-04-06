@@ -26,13 +26,10 @@
 
 	<!-- 插入 -->
 	<insert id="insert" useGeneratedKeys="true" keyProperty="${table.idColumn.columnNameFirstLower}">
-    	<![CDATA[
  		INSERT INTO ${table.sqlName} ( 
         <#list table.columns as column>
         	<#if column.isDateTimeColumn>
-            <if test="${column.columnNameFirstLower} != null">
 	         	${column.sqlName} <#if column_has_next>,</#if>
-	       	</if>
 	       	</#if>  
 	       	<#if column.isNumberColumn>
 			<if test="${column.columnNameFirstLower} != null">
@@ -48,11 +45,14 @@
         ) VALUES (
         <#list table.columns as column>
         	<#if column.isDateTimeColumn>
-            <if test="${column.columnNameFirstLower} != null">
-	         	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
-	       	<else>
-	       		NOW() <#if column_has_next>,</#if>
-	       	</if>
+	       	<choose>
+	        	<when test="${column.columnNameFirstLower} != null">
+		         	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+		       	</when>
+		       	<otherwise>
+		       		NOW() <#if column_has_next>,</#if>
+		       	</otherwise>
+	        </choose>
 	       	</#if>  
 	       	<#if column.isNumberColumn>
 			<if test="${column.columnNameFirstLower} != null">
@@ -66,7 +66,6 @@
 	      	</#if>
         </#list>        
         )
-    	]]>
 	</insert>
 	
 	<!-- 批量插入 -->
@@ -74,9 +73,7 @@
 		INSERT INTO ${table.sqlName} (
         <#list table.columns as column>
         	<#if column.isDateTimeColumn>
-            <if test="${column.columnNameFirstLower} != null">
 	         	${column.sqlName} <#if column_has_next>,</#if>
-	       	</if>
 	       	</#if>  
 	       	<#if column.isNumberColumn>
 			<if test="${column.columnNameFirstLower} != null">
@@ -94,11 +91,14 @@
         (
         <#list table.columns as column>
         	<#if column.isDateTimeColumn>
-            <if test="${column.columnNameFirstLower} != null">
-	         	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
-	       	<else>
-	       		NOW() <#if column_has_next>,</#if>
-	       	</if>
+	       	<choose>
+	        	<when test="${column.columnNameFirstLower} != null">
+		         	<@mapperEl column.columnNameFirstLower/> <#if column_has_next>,</#if>
+		       	</when>
+		       	<otherwise>
+		       		NOW() <#if column_has_next>,</#if>
+		       	</otherwise>
+	        </choose>
 	       	</#if>  
 	       	<#if column.isNumberColumn>
 			<if test="${column.columnNameFirstLower} != null">
@@ -168,7 +168,7 @@
 		FROM ${table.sqlName} 
 		WHERE 1 = 1
 		<#list table.compositeIdColumns as column>
-			${column.sqlName} = <@mapperEl 'id'/> <#if column_has_next> AND </#if>
+			AND ${column.sqlName} = <@mapperEl 'id'/>
 		</#list>    
 	    ]]>
 	</select>

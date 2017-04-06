@@ -2,6 +2,11 @@
 <#assign classNameLower = className?uncap_first>   
 package ${basepackage}.service;
 
+import java.util.List;
+
+import com.yirun.framework.core.utils.pager.Pager;
+import ${basepackage}.model.${className};
+
 /**
  * @Project       : ${projectName}
  * @Program Name  : ${basepackage}.service.${className}Service.java

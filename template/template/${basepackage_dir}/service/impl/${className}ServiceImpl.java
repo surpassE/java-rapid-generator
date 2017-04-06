@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.yirun.framework.core.utils.pager.Pager;
-import com.yirun.framework.sms.model.SysTelMsg;
 
 import ${basepackage}.model.${className};
 
