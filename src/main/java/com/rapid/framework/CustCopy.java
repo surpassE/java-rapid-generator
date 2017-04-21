@@ -14,22 +14,27 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.springframework.util.FileCopyUtils;
-
+/**
+ * 自定义测试类
+ * @author 	 zc.ding
+ * @since 	 2017年4月21日
+ * @version  1.1
+ */
 public class CustCopy {
 
 	static Logger logger = Logger.getLogger(CustCopy.class);
 	/**
 	 * 新生成的文件路径
 	 */
-	static final String SRC_PATH = "C:\\yrtz\\test\\generator";
+	public static final String SRC_PATH = "C:\\yrtz\\test\\generator";
 	/**
 	 * 源文件路径
 	 */
-	static final String DEST_PATH = "C:\\yrtz\\test\\generator\\dest";
+	public static final String DEST_PATH = "C:\\yrtz\\test\\generator\\dest";
 	/**
 	 * 文件中自定义内容的关键字
 	 */
-	static final String JAVA_KEY = "forceretain";
+	public static final String JAVA_KEY = "forceretain";
 	/**
 	 * 用于存储自定义缓存内容
 	 */
@@ -53,15 +58,12 @@ public class CustCopy {
 	}
 
 	/**
-	 * @described			: 缓存需要强制留下的元素
-	 * @author				: zc.ding
-	 * @project				: java-rapid-generator
-	 * @package				: com.rapid.framework.Copy.java
-	 * @return				: void
-	 * @throws IOException 
-	 * @since 				: 2017年4月20日
+	 * 缓存需要强制留下的元素
+	 * @author	 zc.ding
+	 * @since 	 2017年4月21日
+	 * @throws IOException
 	 */
-	static void cacheContent() throws IOException{
+	public static void cacheContent() throws IOException{
 		File[] files = getFiles(DEST_PATH);
 		for(File file : files){
 			BufferedReader br = new BufferedReader(new FileReader(file));
@@ -82,16 +84,14 @@ public class CustCopy {
 	}
 	
 	/**
-	 * @described			: 改变记录标志位
-	 * @author				: zc.ding
-	 * @project				: java-rapid-generator
-	 * @package				: com.rapid.framework.CustCopy.java
-	 * @return				: boolean
-	 * @since 				: 2017年4月20日
+	 * 改变记录标志位
+	 * @author	 zc.ding
+	 * @return	 boolean
+	 * @since 	 2017年4月21日
 	 * @param flag
 	 * @return
 	 */
-	static boolean changeFlag(boolean flag){
+	public static boolean changeFlag(boolean flag){
 		if(line.toLowerCase().indexOf(JAVA_KEY) > -1){
 			return !flag;
 		}
@@ -99,14 +99,12 @@ public class CustCopy {
 	}
 	
 	/**
-	 * @described			: 完成文件的移动
-	 * @author				: zc.ding
-	 * @project				: java-rapid-generator
-	 * @package				: com.rapid.framework.Copy.java
-	 * @return				: void
-	 * @since 				: 2017年4月20日
+	 * 完成文件的移动
+	 * @author	 zc.ding
+	 * @since 	 2017年4月21日
+	 * @throws IOException
 	 */
-	static void copyFiles() throws IOException {
+	public static void copyFiles() throws IOException {
 		File[] files = getFiles(SRC_PATH);
 		for(File file : files){
 			File newFile = new File(DEST_PATH + File.separator + file.getName());
@@ -120,14 +118,12 @@ public class CustCopy {
 	}
 
 	/**
-	 * @described			: 将自定义的数据重新写回到文件中
-	 * @author				: zc.ding
-	 * @project				: java-rapid-generator
-	 * @package				: com.rapid.framework.Copy.java
-	 * @return				: void
-	 * @since 				: 2017年4月20日
+	 * 将自定义的数据重新写回到文件中
+	 * @author	 zc.ding
+	 * @since 	 2017年4月21日
+	 * @throws IOException
 	 */
-	static void overrideForceRetain() throws IOException{
+	public static void overrideForceRetain() throws IOException{
 		File[] files = getFiles(DEST_PATH);
 		for(File file : files){
 			BufferedReader br = new BufferedReader(new FileReader(file));
@@ -149,7 +145,15 @@ public class CustCopy {
 		}
 	}
 
-	static File[] getFiles(String file){
+	/**
+	 * 获得file下所有文件
+	 * @author	 zc.ding
+	 * @return	 File[]
+	 * @since 	 2017年4月21日
+	 * @param file
+	 * @return
+	 */
+	public static File[] getFiles(String file){
 		List<File> list = new ArrayList<>();
 		File[] files = new File(file).listFiles();
 		if(files != null){
@@ -163,29 +167,32 @@ public class CustCopy {
 	}
 
 	/**
-	 * @described			: 获得文件中唯一标识
-	 * @author				: zc.ding
-	 * @project				: java-rapid-generator
-	 * @package				: com.rapid.framework.CustCopy.java
-	 * @return				: String
-	 * @since 				: 2017年4月20日
+	 * 
+	 * @author	 zc.ding
+	 * @return	 String
+	 * @since 	 2017年4月21日
 	 * @param line
-	 * @return
 	 */
-	static String getKey(String line){
+	public static String getKey(String line){
 		if(line.trim().startsWith("public class") || line.trim().indexOf("<mapper namespace=") > -1){
 			return line;
 		}
 		return null;
 	}
 
-	static void clear(){
+	public static void clear(){
 		line = null;
 		key = null;
 		sb = new StringBuilder();
 	}
 	
-	public void demo(){
-//		
+	/**
+	 * @param tmp
+	 * @return
+	 * @author	 zc.ding
+	 * @since 	 2017年4月21日
+	 */
+	public String demo(String tmp){
+		return tmp;
 	}
 }
