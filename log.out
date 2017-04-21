@@ -12740,3 +12740,130 @@ Expecting a string, date or number here, Expression column.isPk is instead a fre
 [DEBUG][2017-04-06 11:09:46,758][freemarker.cache]Could not find template in cache, creating new one; id=[\template\${basepackage_dir}\test\BaseTest.java\macro.include[zh_CN,UTF-8,parsed] ]
 [DEBUG][2017-04-06 11:09:46,758][freemarker.cache]Could not find template in cache, creating new one; id=[\template\${basepackage_dir}\test\BaseTest.java[zh_CN,UTF-8,parsed] ]
 [DEBUG][2017-04-06 11:09:46,777][freemarker.cache]Compiling FreeMarker template \template\${basepackage_dir}\test\BaseTest.java[zh_CN,UTF-8,parsed]  from C:\yrtz\git\github\java-rapid-generator\template\template\${basepackage_dir}\test\BaseTest.java
+[DEBUG][2017-04-21 17:04:28,984][com.rapid.framework.CustCopy]okC:\yrtz\test\generator\AppMenuMapper.xml ==> C:\yrtz\test\generator\dest\AppMenuMapper.xml
+[DEBUG][2017-04-21 17:04:29,002][com.rapid.framework.CustCopy]okC:\yrtz\test\generator\User.java ==> C:\yrtz\test\generator\dest\User.java
+[DEBUG][2017-04-21 17:09:58,146][com.rapid.framework.CustCopy]
+[DEBUG][2017-04-21 17:09:58,155][com.rapid.framework.CustCopy]//	forceretain
+	public void test(){
+		System.out.println("");
+	}
+//	forceretain
+//	forceretain
+	public void test(){
+		System.out.println("");
+	}
+//	forceretain
+
+[DEBUG][2017-04-21 17:19:22,825][com.rapid.framework.CustCopy]
+[DEBUG][2017-04-21 17:19:22,830][com.rapid.framework.CustCopy]//	forceretain
+	public void test(){
+		System.out.println("");
+	}
+//	forceretain
+//	forceretain
+	public void test(){
+		System.out.println("");
+	}
+//	forceretain
+
+[DEBUG][2017-04-21 17:20:32,132][com.rapid.framework.CustCopy]
+[DEBUG][2017-04-21 17:20:32,144][com.rapid.framework.CustCopy]//	forceretain
+	public void test(){
+		System.out.println("");
+	}
+//	forceretain
+//	forceretain
+	public void test(){
+		System.out.println("");
+	}
+//	forceretain
+
+[DEBUG][2017-04-21 17:21:12,764][com.rapid.framework.CustCopy]<mapper namespace="com.sirding.mybatis.mapper.AppMenuMapper">
+[DEBUG][2017-04-21 17:21:12,784][com.rapid.framework.CustCopy]  <!-- forceretain -->
+  <!--  -->
+  <select id="findMenuListByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+		m.*
+	FROM
+		app_user AS u
+	INNER JOIN app_user_role AS ur ON u.id = ur.user_id
+	INNER JOIN app_role AS r ON ur.role_id = r.id
+	INNER JOIN app_role_menu AS rm ON rm.role_id = r.id
+	INNER JOIN app_menu AS m ON rm.menu_id = m.id
+	WHERE u.id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <!--  -->
+  <select id="findMenuListBySysUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+		m.id AS id,		
+		m.parent_id AS parent_id,
+		m.`name` AS NAME,
+		m.url AS url,
+		m.pos AS pos,
+		m.note AS note
+	FROM
+		app_sys_user AS u
+	INNER JOIN app_sys_user_role AS ur ON u.id = ur.sys_user_id
+	INNER JOIN app_role AS r ON ur.role_id = r.id
+	INNER JOIN app_role_menu AS rm ON rm.role_id = r.id
+	INNER JOIN app_menu AS m ON rm.menu_id = m.id
+	WHERE u.id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- forceretain -->
+
+[DEBUG][2017-04-21 17:21:12,785][com.rapid.framework.CustCopy]public class User {
+[DEBUG][2017-04-21 17:21:12,786][com.rapid.framework.CustCopy]//	forceretain
+	public void test(){
+		System.out.println("");
+	}
+//	forceretain
+//	forceretain
+	public void test(){
+		System.out.println("");
+	}
+//	forceretain
+
+[DEBUG][2017-04-21 17:22:33,554][com.rapid.framework.CustCopy]okC:\yrtz\test\generator\AppMenuMapper.xml ==> C:\yrtz\test\generator\dest\AppMenuMapper.xml
+[DEBUG][2017-04-21 17:22:33,558][com.rapid.framework.CustCopy]okC:\yrtz\test\generator\User.java ==> C:\yrtz\test\generator\dest\User.java
+[DEBUG][2017-04-21 17:22:33,567][com.rapid.framework.CustCopy]<mapper namespace="com.sirding.mybatis.mapper.AppMenuMapper">
+[DEBUG][2017-04-21 17:22:33,568][com.rapid.framework.CustCopy]  <!-- forceretain -->
+  <!--  -->
+  <select id="findMenuListByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+		m.*
+	FROM
+		app_user AS u
+	INNER JOIN app_user_role AS ur ON u.id = ur.user_id
+	INNER JOIN app_role AS r ON ur.role_id = r.id
+	INNER JOIN app_role_menu AS rm ON rm.role_id = r.id
+	INNER JOIN app_menu AS m ON rm.menu_id = m.id
+	WHERE u.id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <!--  -->
+  <select id="findMenuListBySysUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+		m.id AS id,		
+		m.parent_id AS parent_id,
+		m.`name` AS NAME,
+		m.url AS url,
+		m.pos AS pos,
+		m.note AS note
+	FROM
+		app_sys_user AS u
+	INNER JOIN app_sys_user_role AS ur ON u.id = ur.sys_user_id
+	INNER JOIN app_role AS r ON ur.role_id = r.id
+	INNER JOIN app_role_menu AS rm ON rm.role_id = r.id
+	INNER JOIN app_menu AS m ON rm.menu_id = m.id
+	WHERE u.id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- forceretain -->
+
+[DEBUG][2017-04-21 17:22:33,568][com.rapid.framework.CustCopy]public class User {
+[DEBUG][2017-04-21 17:22:33,568][com.rapid.framework.CustCopy]//	forceretain
+	public void test(){
+		System.out.println("");
+	}
+//	forceretain
+

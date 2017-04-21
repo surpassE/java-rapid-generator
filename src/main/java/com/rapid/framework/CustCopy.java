@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.springframework.util.FileCopyUtils;
@@ -45,6 +46,10 @@ public class CustCopy {
 		copyFiles();
 		//将自定义的缓存内容重新写入到文件中
 		overrideForceRetain();
+		for(Entry<String, String> entry : map.entrySet()){
+			logger.debug(entry.getKey());
+			logger.debug(entry.getValue());
+		}
 	}
 
 	/**
@@ -56,13 +61,15 @@ public class CustCopy {
 	 * @throws IOException 
 	 * @since 				: 2017年4月20日
 	 */
-	public static void cacheContent() throws IOException{
+	static void cacheContent() throws IOException{
 		File[] files = getFiles(DEST_PATH);
 		for(File file : files){
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			boolean flag = false;
 			while((line = br.readLine()) != null){
-				key = getKey(line);
+				if(key == null){
+					key = getKey(line);
+				}
 				if((line.toLowerCase().indexOf(JAVA_KEY) > -1) || flag){
 					sb.append(line).append("\n");
 					flag = changeFlag(flag);
@@ -99,7 +106,7 @@ public class CustCopy {
 	 * @return				: void
 	 * @since 				: 2017年4月20日
 	 */
-	public static void copyFiles() throws IOException {
+	static void copyFiles() throws IOException {
 		File[] files = getFiles(SRC_PATH);
 		for(File file : files){
 			File newFile = new File(DEST_PATH + File.separator + file.getName());
@@ -120,12 +127,14 @@ public class CustCopy {
 	 * @return				: void
 	 * @since 				: 2017年4月20日
 	 */
-	public static void overrideForceRetain() throws IOException{
+	static void overrideForceRetain() throws IOException{
 		File[] files = getFiles(DEST_PATH);
 		for(File file : files){
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			while((line = br.readLine()) != null){
-				key = getKey(line);
+				if(key == null){
+					key = getKey(line);
+				}
 				if("}".equals(line.trim()) && line.startsWith("}") || "</mapper>".equals(line.trim())){
 					sb.append(map.get(key));
 				}
@@ -163,14 +172,14 @@ public class CustCopy {
 	 * @param line
 	 * @return
 	 */
-	private static String getKey(String line){
-		if(line.startsWith("public class") || line.indexOf("<mapper namespace=") > -1){
+	static String getKey(String line){
+		if(line.trim().startsWith("public class") || line.trim().indexOf("<mapper namespace=") > -1){
 			return line;
 		}
 		return null;
 	}
 
-	private static void clear(){
+	static void clear(){
 		line = null;
 		key = null;
 		sb = new StringBuilder();
