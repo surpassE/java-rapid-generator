@@ -29,18 +29,18 @@ public class Generator4MybatisPlus {
         GlobalConfig gc = new GlobalConfig();
 //        String projectPath = System.getProperty("user.dir");
 //        gc.setOutputDir(projectPath + "/src/main/java");
-        gc.setOutputDir("E:\\test");
+        gc.setOutputDir("D:\\test");
         gc.setFileOverride(true);
         gc.setActiveRecord(false);// 不需要ActiveRecord特性的请改为false
         gc.setEnableCache(false);// XML 二级缓存
         gc.setBaseResultMap(true);// XML ResultMap
         gc.setBaseColumnList(false);// XML columList
-        gc.setAuthor("zc.ding");// 作者
+        gc.setAuthor("dingzhichao3@jd.com");// 作者
 
         // 自定义文件命名，注意 %s 会自动填充表实体属性！
         gc.setControllerName("%sController");
-        gc.setServiceName("%sService");
-        gc.setServiceImplName("%sServiceImpl");
+        gc.setServiceName("%sManager");
+        gc.setServiceImplName("%sManagerImpl");
         gc.setMapperName("%sMapper");
         gc.setXmlName("%sMapper");
         mpg.setGlobalConfig(gc);
@@ -48,16 +48,18 @@ public class Generator4MybatisPlus {
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setDriverName("com.mysql.jdbc.Driver");
-        dsc.setUsername("root");
-        dsc.setPassword("root");
-        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/demo");
+        dsc.setUsername("m_esu_configkiis");
+        dsc.setPassword("A3GnET");
+        dsc.setUrl("jdbc:mysql://172.25.4.216:3306/esu_config_center");
         mpg.setDataSource(dsc);
 
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         // strategy.setTablePrefix(new String[] { "sys_" });// 此处可以修改为您的表前缀
-        strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        strategy.setInclude(new String[] { "user_info" }); // 需要生成的表
+        // 表名生成策略
+        strategy.setNaming(NamingStrategy.underline_to_camel);
+        // 需要生成的表
+//        strategy.setInclude(new String[] { "cfg_app_config" });
 
         strategy.setSuperServiceClass(null);
         strategy.setSuperServiceImplClass(null);
@@ -68,12 +70,12 @@ public class Generator4MybatisPlus {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.example.demo");
+        pc.setParent("com.jd.jr.esu.config.center");
         pc.setController("controller");
-        pc.setService("service");
-        pc.setServiceImpl("service.impl");
-        pc.setMapper("dao");
-        pc.setEntity("model");
+        pc.setService("manager");
+        pc.setServiceImpl("manager.impl");
+        pc.setMapper("dao.mapper");
+        pc.setEntity("domain.entity.core.enterprise");
 
         pc.setXml("xml");
         mpg.setPackageInfo(pc);
